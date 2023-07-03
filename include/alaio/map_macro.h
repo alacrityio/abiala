@@ -30,35 +30,35 @@
  * This file has been modified by block.one
  */
 
-#ifndef EOSIO_MAP_MACRO_H_INCLUDED
-#define EOSIO_MAP_MACRO_H_INCLUDED
+#ifndef ALAIO_MAP_MACRO_H_INCLUDED
+#define ALAIO_MAP_MACRO_H_INCLUDED
 
-#define EOSIO_EVAL0(...) __VA_ARGS__
-#define EOSIO_EVAL1(...) EOSIO_EVAL0(EOSIO_EVAL0(EOSIO_EVAL0(__VA_ARGS__)))
-#define EOSIO_EVAL2(...) EOSIO_EVAL1(EOSIO_EVAL1(EOSIO_EVAL1(__VA_ARGS__)))
-#define EOSIO_EVAL3(...) EOSIO_EVAL2(EOSIO_EVAL2(EOSIO_EVAL2(__VA_ARGS__)))
-#define EOSIO_EVAL4(...) EOSIO_EVAL3(EOSIO_EVAL3(EOSIO_EVAL3(__VA_ARGS__)))
-#define EOSIO_EVAL(...) EOSIO_EVAL4(EOSIO_EVAL4(EOSIO_EVAL4(__VA_ARGS__)))
+#define ALAIO_EVAL0(...) __VA_ARGS__
+#define ALAIO_EVAL1(...) ALAIO_EVAL0(ALAIO_EVAL0(ALAIO_EVAL0(__VA_ARGS__)))
+#define ALAIO_EVAL2(...) ALAIO_EVAL1(ALAIO_EVAL1(ALAIO_EVAL1(__VA_ARGS__)))
+#define ALAIO_EVAL3(...) ALAIO_EVAL2(ALAIO_EVAL2(ALAIO_EVAL2(__VA_ARGS__)))
+#define ALAIO_EVAL4(...) ALAIO_EVAL3(ALAIO_EVAL3(ALAIO_EVAL3(__VA_ARGS__)))
+#define ALAIO_EVAL(...) ALAIO_EVAL4(ALAIO_EVAL4(ALAIO_EVAL4(__VA_ARGS__)))
 
-#define EOSIO_MAP_END(...)
-#define EOSIO_MAP_OUT
+#define ALAIO_MAP_END(...)
+#define ALAIO_MAP_OUT
 
-#define EOSIO_MAP_GET_END2() 0, EOSIO_MAP_END
-#define EOSIO_MAP_GET_END1(...) EOSIO_MAP_GET_END2
-#define EOSIO_MAP_GET_END(...) EOSIO_MAP_GET_END1
-#define EOSIO_MAP_NEXT0(test, next, ...) next EOSIO_MAP_OUT
-#define EOSIO_MAP_NEXT1(test, next) EOSIO_MAP_NEXT0(test, next, 0)
-#define EOSIO_MAP_NEXT(test, next) EOSIO_MAP_NEXT1(EOSIO_MAP_GET_END test, next)
+#define ALAIO_MAP_GET_END2() 0, ALAIO_MAP_END
+#define ALAIO_MAP_GET_END1(...) ALAIO_MAP_GET_END2
+#define ALAIO_MAP_GET_END(...) ALAIO_MAP_GET_END1
+#define ALAIO_MAP_NEXT0(test, next, ...) next ALAIO_MAP_OUT
+#define ALAIO_MAP_NEXT1(test, next) ALAIO_MAP_NEXT0(test, next, 0)
+#define ALAIO_MAP_NEXT(test, next) ALAIO_MAP_NEXT1(ALAIO_MAP_GET_END test, next)
 
 // Macros below this point added by block.one
 
-#define EOSIO_MAP_REUSE_ARG0_0(f, arg0, x, peek, ...)                                                                  \
-   f(arg0, x) EOSIO_MAP_NEXT(peek, EOSIO_MAP_REUSE_ARG0_1)(f, arg0, peek, __VA_ARGS__)
-#define EOSIO_MAP_REUSE_ARG0_1(f, arg0, x, peek, ...)                                                                  \
-   f(arg0, x) EOSIO_MAP_NEXT(peek, EOSIO_MAP_REUSE_ARG0_0)(f, arg0, peek, __VA_ARGS__)
+#define ALAIO_MAP_REUSE_ARG0_0(f, arg0, x, peek, ...)                                                                  \
+   f(arg0, x) ALAIO_MAP_NEXT(peek, ALAIO_MAP_REUSE_ARG0_1)(f, arg0, peek, __VA_ARGS__)
+#define ALAIO_MAP_REUSE_ARG0_1(f, arg0, x, peek, ...)                                                                  \
+   f(arg0, x) ALAIO_MAP_NEXT(peek, ALAIO_MAP_REUSE_ARG0_0)(f, arg0, peek, __VA_ARGS__)
 // Handle 0 arguments
-#define EOSIO_MAP_REUSE_ARG0_I(f, arg0, peek, ...)                                                                     \
-   EOSIO_MAP_NEXT(peek, EOSIO_MAP_REUSE_ARG0_1)(f, arg0, peek, __VA_ARGS__)
-#define EOSIO_MAP_REUSE_ARG0(f, ...) EOSIO_EVAL(EOSIO_MAP_REUSE_ARG0_I(f, __VA_ARGS__, ()()(), ()()(), ()()(), 0))
+#define ALAIO_MAP_REUSE_ARG0_I(f, arg0, peek, ...)                                                                     \
+   ALAIO_MAP_NEXT(peek, ALAIO_MAP_REUSE_ARG0_1)(f, arg0, peek, __VA_ARGS__)
+#define ALAIO_MAP_REUSE_ARG0(f, ...) ALAIO_EVAL(ALAIO_MAP_REUSE_ARG0_I(f, __VA_ARGS__, ()()(), ()()(), ()()(), 0))
 
 #endif

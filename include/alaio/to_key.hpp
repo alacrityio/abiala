@@ -14,7 +14,7 @@
 #include <cstring>
 #include <limits>
 
-namespace eosio {
+namespace alaio {
 
 template <typename... Ts, typename S>
 void to_key(const std::tuple<Ts...>& obj, S& stream);
@@ -278,7 +278,7 @@ void to_key(const T& obj, S& stream) {
       static_assert(!std::is_convertible_v<T, std::underlying_type_t<T>>, "Serializing unscoped enum");
       to_key(static_cast<std::underlying_type_t<T>>(obj), stream);
    } else {
-      eosio::for_each_field(obj, [&](const auto& member) {
+      alaio::for_each_field(obj, [&](const auto& member) {
          to_key(member, stream);
       });
    }
@@ -302,4 +302,4 @@ std::vector<char> convert_to_key(const T& t) {
    return result;
 }
 
-} // namespace eosio
+} // namespace alaio

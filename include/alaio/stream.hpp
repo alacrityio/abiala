@@ -10,7 +10,7 @@
 #include <system_error>
 #include <string_view>
 
-namespace eosio {
+namespace alaio {
 
 enum class stream_error {
    no_error,
@@ -232,4 +232,4 @@ struct input_stream {
    }
 };
 
-} // namespace eosio
+} // namespace alaio

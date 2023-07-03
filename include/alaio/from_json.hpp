@@ -11,7 +11,7 @@
 #include <errno.h>
 #include <map>
 
-namespace eosio {
+namespace alaio {
 enum class from_json_error {
    no_error,
 
@@ -607,7 +607,7 @@ void from_json_hex(std::vector<char>& result, S& stream) {
          convert_json_error(from_json_error::expected_hex_string) );
 }
 
-#ifdef __eosio_cdt__
+#ifdef __alaio_cdt__
 
 template <typename S> void from_json(long double& result, S& stream) {
    auto s = stream.get_string();
@@ -653,7 +653,7 @@ template <typename T, typename S>
 void from_json(T& obj, S& stream) {
    from_json_object(stream, [&](std::string_view key) {
       bool found = false;
-      eosio::for_each_field<T>([&](std::string_view member_name, auto member) {
+      alaio::for_each_field<T>([&](std::string_view member_name, auto member) {
          if (!found && key == member_name) {
             from_json(member(&obj), stream);
             found = true;
@@ -732,7 +732,7 @@ __attribute__((noinline)) result<void> from_json(tagged_variant<Options, NamedTy
    from_json_skip_space(pos, end);
    from_json_expect(pos, end, '[', "expected array");
 
-   eosio::name name;
+   alaio::name name;
    from_json(name, pos, end);
 
    for (size_t i = 0; i < sizeof...(NamedTypes); ++i) {
@@ -746,4 +746,4 @@ __attribute__((noinline)) result<void> from_json(tagged_variant<Options, NamedTy
 }
 */
 
-} // namespace eosio
+} // namespace alaio

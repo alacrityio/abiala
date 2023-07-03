@@ -42,7 +42,7 @@ Example transaction data for `abiala_json_to_bin`:
     "delay_sec": 0,
     "context_free_actions": [],
     "actions": [{
-        "account": "eosio.token",
+        "account": "alaio.token",
         "name": "transfer",
         "authorization":[{
             "actor":"useraaaaaaaa",

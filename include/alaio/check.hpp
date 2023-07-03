@@ -4,17 +4,17 @@
  */
 #pragma once
 
-#ifdef __eosio_cdt__
+#ifdef __alaio_cdt__
 #include <cstdint>
-namespace eosio {
+namespace alaio {
 namespace internal_use_do_not_use {
 extern "C" {
-__attribute__((eosio_wasm_import, noreturn))
-void eosio_assert_message(uint32_t, const char*, uint32_t);
-__attribute__((eosio_wasm_import, noreturn))
-void eosio_assert(uint32_t, const char*);
-__attribute__((eosio_wasm_import, noreturn))
-void eosio_assert_code(uint32_t, uint64_t);
+__attribute__((alaio_wasm_import, noreturn))
+void alaio_assert_message(uint32_t, const char*, uint32_t);
+__attribute__((alaio_wasm_import, noreturn))
+void alaio_assert(uint32_t, const char*);
+__attribute__((alaio_wasm_import, noreturn))
+void alaio_assert_code(uint32_t, uint64_t);
 }
 }
 }
@@ -25,49 +25,49 @@ void eosio_assert_code(uint32_t, uint64_t);
 #include <string>
 #include <string_view>
 
-namespace eosio {
+namespace alaio {
 
 /**
  *  @defgroup system System
  *  @ingroup core
- *  @brief Defines wrappers over eosio_assert
+ *  @brief Defines wrappers over alaio_assert
  */
 
 
-struct eosio_error : std::exception {
-   explicit eosio_error(uint64_t code) {}
+struct alaio_error : std::exception {
+   explicit alaio_error(uint64_t code) {}
 };
 
 namespace detail {
    [[noreturn]] inline void assert_or_throw(std::string_view msg) {
-#ifdef __eosio_cdt__
-         internal_use_do_not_use::eosio_assert_message(false, msg.data(), msg.size());
+#ifdef __alaio_cdt__
+         internal_use_do_not_use::alaio_assert_message(false, msg.data(), msg.size());
 #else
          throw std::runtime_error(std::string(msg));
 #endif
    }
    [[noreturn]] inline void assert_or_throw(const char* msg) {
-#ifdef __eosio_cdt__
-         internal_use_do_not_use::eosio_assert(false, msg);
+#ifdef __alaio_cdt__
+         internal_use_do_not_use::alaio_assert(false, msg);
 #else
          throw std::runtime_error(msg);
 #endif
    }
    [[noreturn]] inline void assert_or_throw(std::string&& msg) {
-#ifdef __eosio_cdt__
-         internal_use_do_not_use::eosio_assert_message(false, msg.c_str(), msg.size());
+#ifdef __alaio_cdt__
+         internal_use_do_not_use::alaio_assert_message(false, msg.c_str(), msg.size());
 #else
          throw std::runtime_error(std::move(msg));
 #endif
    }
    [[noreturn]] inline void assert_or_throw(uint64_t code) {
-#ifdef __eosio_cdt__
-         internal_use_do_not_use::eosio_assert_code(false, code);
+#ifdef __alaio_cdt__
+         internal_use_do_not_use::alaio_assert_code(false, code);
 #else
          throw std::runtime_error(std::to_string(code));
 #endif
    }
-} // ns eosio::detail
+} // ns alaio::detail
 
 /**
  *  Assert if the predicate fails and use the supplied message.
@@ -76,12 +76,12 @@ namespace detail {
  *
  *  Example:
  *  @code
- *  eosio::check(a == b, "a does not equal b");
+ *  alaio::check(a == b, "a does not equal b");
  *  @endcode
  */
 inline void check(bool pred, std::string_view msg) {
    if (!pred)
-      eosio::detail::assert_or_throw(msg);
+      alaio::detail::assert_or_throw(msg);
 }
 
 /**
@@ -91,12 +91,12 @@ inline void check(bool pred, std::string_view msg) {
  *
  *  Example:
  *  @code
- *  eosio::check(a == b, "a does not equal b");
+ *  alaio::check(a == b, "a does not equal b");
  *  @endcode
  */
 inline void check(bool pred, const char* msg) {
    if (!pred)
-      eosio::detail::assert_or_throw(msg);
+      alaio::detail::assert_or_throw(msg);
 }
 
 /**
@@ -106,12 +106,12 @@ inline void check(bool pred, const char* msg) {
  *
  *  Example:
  *  @code
- *  eosio::check(a == b, "a does not equal b");
+ *  alaio::check(a == b, "a does not equal b");
  *  @endcode
  */
 inline void check(bool pred, const std::string& msg) {
    if (!pred)
-      eosio::detail::assert_or_throw(std::string_view{msg.c_str(), msg.size()});
+      alaio::detail::assert_or_throw(std::string_view{msg.c_str(), msg.size()});
 }
 
 /**
@@ -121,12 +121,12 @@ inline void check(bool pred, const std::string& msg) {
  *
  *  Example:
  *  @code
- *  eosio::check(a == b, "a does not equal b");
+ *  alaio::check(a == b, "a does not equal b");
  *  @endcode
  */
 inline void check(bool pred, std::string&& msg) {
    if (!pred)
-      eosio::detail::assert_or_throw(std::move(msg));
+      alaio::detail::assert_or_throw(std::move(msg));
 }
 
 /**
@@ -137,12 +137,12 @@ inline void check(bool pred, std::string&& msg) {
  *  Example:
  *  @code
  *  const char* msg = "a does not equal b b does not equal a";
- *  eosio::check(a == b, "a does not equal b", 18);
+ *  alaio::check(a == b, "a does not equal b", 18);
  *  @endcode
  */
 inline void check(bool pred, const char* msg, size_t n) {
    if (!pred)
-      eosio::detail::assert_or_throw(std::string_view{msg, n});
+      alaio::detail::assert_or_throw(std::string_view{msg, n});
 }
 
 /**
@@ -153,12 +153,12 @@ inline void check(bool pred, const char* msg, size_t n) {
  *  Example:
  *  @code
  *  std::string msg = "a does not equal b b does not equal a";
- *  eosio::check(a == b, msg, 18);
+ *  alaio::check(a == b, msg, 18);
  *  @endcode
  */
 inline void check(bool pred, const std::string& msg, size_t n) {
    if (!pred)
-      eosio::detail::assert_or_throw(msg.substr(0, n));
+      alaio::detail::assert_or_throw(msg.substr(0, n));
 }
 
 /**
@@ -168,11 +168,11 @@ inline void check(bool pred, const std::string& msg, size_t n) {
  *
  *  Example:
  *  @code
- *  eosio::check(a == b, 13);
+ *  alaio::check(a == b, 13);
  *  @endcode
  */
 inline void check(bool pred, uint64_t code) {
    if (!pred)
-      eosio::detail::assert_or_throw(code);
+      alaio::detail::assert_or_throw(code);
 }
-} // namespace eosio
+} // namespace alaio
