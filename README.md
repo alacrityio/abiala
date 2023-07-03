@@ -1,25 +1,25 @@
-## abieos
+## abiala
 
-Binary <> JSON conversion using ABIs. Compatible with languages which can interface to C; see [src/abieos.h](src/abieos.h).
+Binary <> JSON conversion using ABIs. Compatible with languages which can interface to C; see [src/abiala.h](src/abiala.h).
 
 Alpha release. Feedback requested.
 
 ## Packing transactions
 
-1. Create a context: `abieos_create`
-1. Use `abieos_set_abi` to load [eosjs2/src/transaction.abi](https://github.com/EOSIO/eosjs2/blob/master/src/transaction.abi) into contract 0.
-1. Use `abieos_set_abi` to load the contract's ABI.
-1. Use `abieos_json_to_bin` and `abieos_get_bin_hex` to convert action data to hex. Use `abieos_get_type_for_action` to get the action's type.
-1. Use `abieos_json_to_bin` and `abieos_get_bin_hex` to convert transaction to hex. Use `contract = 0` and `type = abieos_string_to_name(context, "transaction")`.
-1. Destroy the context: `abieos_destroy`
+1. Create a context: `abiala_create`
+1. Use `abiala_set_abi` to load [alajs/src/transaction.abi](https://github.com/ALADINIO/alajs/blob/master/src/transaction.abi) into contract 0.
+1. Use `abiala_set_abi` to load the contract's ABI.
+1. Use `abiala_json_to_bin` and `abiala_get_bin_hex` to convert action data to hex. Use `abiala_get_type_for_action` to get the action's type.
+1. Use `abiala_json_to_bin` and `abiala_get_bin_hex` to convert transaction to hex. Use `contract = 0` and `type = abiala_string_to_name(context, "transaction")`.
+1. Destroy the context: `abiala_destroy`
 
 ## Usage note
 
-abieos expects object attributes to be in order. It will complain about missing attributes if they are out of order.
+abiala expects object attributes to be in order. It will complain about missing attributes if they are out of order.
 
 ## Example data
 
-Example action data for `abieos_json_to_bin`:
+Example action data for `abiala_json_to_bin`:
 
 ```
 {
@@ -30,7 +30,7 @@ Example action data for `abieos_json_to_bin`:
 }
 ```
 
-Example transaction data for `abieos_json_to_bin`:
+Example transaction data for `abiala_json_to_bin`:
 
 ```
 {
@@ -56,11 +56,11 @@ Example transaction data for `abieos_json_to_bin`:
 
 ## Ubuntu 16.04 with gcc 8.1.0
 
-* Install these. You may have to build them yourself from source or find a PPA. Make them the default.
-  * gcc 8.1.0
-  * cmake 3.11.3
-* `sudo apt install libboost-dev libboost-date-time-dev`
-* remove this from CMakeLists.txt (2 places): `-fsanitize=address,undefined`
+- Install these. You may have to build them yourself from source or find a PPA. Make them the default.
+  - gcc 8.1.0
+  - cmake 3.11.3
+- `sudo apt install libboost-dev libboost-date-time-dev`
+- remove this from CMakeLists.txt (2 places): `-fsanitize=address,undefined`
 
 ```
 mkdir build
