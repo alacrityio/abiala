@@ -1,4 +1,4 @@
-// copyright defined in abieos/LICENSE.txt
+// copyright defined in abiala/LICENSE.txt
 
 #pragma once
 
@@ -9,75 +9,75 @@
 extern "C" {
 #endif
 
-typedef struct abieos_context_s abieos_context;
-typedef int abieos_bool;
+typedef struct abiala_context_s abiala_context;
+typedef int abiala_bool;
 
 // Create a context. The context holds all memory allocated by functions in this header. Returns null on failure.
-abieos_context* abieos_create();
+abiala_context* abiala_create();
 
 // Destroy a context.
-void abieos_destroy(abieos_context* context);
+void abiala_destroy(abiala_context* context);
 
 // Get last error. Never returns null. The context owns the returned string.
-const char* abieos_get_error(abieos_context* context);
+const char* abiala_get_error(abiala_context* context);
 
-// Get generated binary. The context owns the returned memory. Functions return null on error; use abieos_get_error to
+// Get generated binary. The context owns the returned memory. Functions return null on error; use abiala_get_error to
 // retrieve error.
-int abieos_get_bin_size(abieos_context* context);
-const char* abieos_get_bin_data(abieos_context* context);
+int abiala_get_bin_size(abiala_context* context);
+const char* abiala_get_bin_data(abiala_context* context);
 
-// Convert generated binary to hex. The context owns the returned string. Returns null on error; use abieos_get_error to
+// Convert generated binary to hex. The context owns the returned string. Returns null on error; use abiala_get_error to
 // retrieve error.
-const char* abieos_get_bin_hex(abieos_context* context);
+const char* abiala_get_bin_hex(abiala_context* context);
 
-// Name conversion. The context owns the returned memory. Functions return null on error; use abieos_get_error to
+// Name conversion. The context owns the returned memory. Functions return null on error; use abiala_get_error to
 // retrieve error.
-uint64_t abieos_string_to_name(abieos_context* context, const char* str);
-const char* abieos_name_to_string(abieos_context* context, uint64_t name);
+uint64_t abiala_string_to_name(abiala_context* context, const char* str);
+const char* abiala_name_to_string(abiala_context* context, uint64_t name);
 
 // Set abi (JSON format). Returns false on error.
-abieos_bool abieos_set_abi(abieos_context* context, uint64_t contract, const char* abi);
+abiala_bool abiala_set_abi(abiala_context* context, uint64_t contract, const char* abi);
 
 // Set abi (binary format). Returns false on error.
-abieos_bool abieos_set_abi_bin(abieos_context* context, uint64_t contract, const char* data, size_t size);
+abiala_bool abiala_set_abi_bin(abiala_context* context, uint64_t contract, const char* data, size_t size);
 
 // Set abi (hex format). Returns false on error.
-abieos_bool abieos_set_abi_hex(abieos_context* context, uint64_t contract, const char* hex);
+abiala_bool abiala_set_abi_hex(abiala_context* context, uint64_t contract, const char* hex);
 
-// Get the type name for an action. The context owns the returned memory. Returns null on error; use abieos_get_error
+// Get the type name for an action. The context owns the returned memory. Returns null on error; use abiala_get_error
 // to retrieve error.
-const char* abieos_get_type_for_action(abieos_context* context, uint64_t contract, uint64_t action);
+const char* abiala_get_type_for_action(abiala_context* context, uint64_t contract, uint64_t action);
 
-// Get the type name for a table. The context owns the returned memory. Returns null on error; use abieos_get_error
+// Get the type name for a table. The context owns the returned memory. Returns null on error; use abiala_get_error
 // to retrieve error.
-const char* abieos_get_type_for_table(abieos_context* context, uint64_t contract, uint64_t table);
+const char* abiala_get_type_for_table(abiala_context* context, uint64_t contract, uint64_t table);
 
 // Get the type name for an action_result. The context owns the returned memory. Returns null on error; use
-// abieos_get_error to retrieve error.
-const char* abieos_get_type_for_action_result(abieos_context* context, uint64_t contract, uint64_t action_result);
+// abiala_get_error to retrieve error.
+const char* abiala_get_type_for_action_result(abiala_context* context, uint64_t contract, uint64_t action_result);
 
-// Convert json to binary. Use abieos_get_bin_* to retrieve result. Returns false on error.
-abieos_bool abieos_json_to_bin(abieos_context* context, uint64_t contract, const char* type, const char* json);
+// Convert json to binary. Use abiala_get_bin_* to retrieve result. Returns false on error.
+abiala_bool abiala_json_to_bin(abiala_context* context, uint64_t contract, const char* type, const char* json);
 
-// Convert json to binary. Allow json field reordering. Use abieos_get_bin_* to retrieve result. Returns false on error.
-abieos_bool abieos_json_to_bin_reorderable(abieos_context* context, uint64_t contract, const char* type,
+// Convert json to binary. Allow json field reordering. Use abiala_get_bin_* to retrieve result. Returns false on error.
+abiala_bool abiala_json_to_bin_reorderable(abiala_context* context, uint64_t contract, const char* type,
                                            const char* json);
 
-// Convert binary to json. The context owns the returned string. Returns null on error; use abieos_get_error to retrieve
+// Convert binary to json. The context owns the returned string. Returns null on error; use abiala_get_error to retrieve
 // error.
-const char* abieos_bin_to_json(abieos_context* context, uint64_t contract, const char* type, const char* data,
+const char* abiala_bin_to_json(abiala_context* context, uint64_t contract, const char* type, const char* data,
                                size_t size);
 
-// Convert hex to json. The context owns the returned memory. Returns null on error; use abieos_get_error to retrieve
+// Convert hex to json. The context owns the returned memory. Returns null on error; use abiala_get_error to retrieve
 // error.
-const char* abieos_hex_to_json(abieos_context* context, uint64_t contract, const char* type, const char* hex);
+const char* abiala_hex_to_json(abiala_context* context, uint64_t contract, const char* type, const char* hex);
 
-// Convert abi json to bin, Use abieos_get_bin_* to retrieve result. Returns false on error.
-abieos_bool abieos_abi_json_to_bin(abieos_context* context, const char* json);
+// Convert abi json to bin, Use abiala_get_bin_* to retrieve result. Returns false on error.
+abiala_bool abiala_abi_json_to_bin(abiala_context* context, const char* json);
 
-// Convert abi bin to json, The context.result_str has the result, Returns null on error; use abieos_get_error to
+// Convert abi bin to json, The context.result_str has the result, Returns null on error; use abiala_get_error to
 // retrieve
-const char* abieos_abi_bin_to_json(abieos_context* context, const char* abi_bin_data, const size_t abi_bin_data_size);
+const char* abiala_abi_bin_to_json(abiala_context* context, const char* abi_bin_data, const size_t abi_bin_data_size);
 
 #ifdef __cplusplus
 }

@@ -53,7 +53,7 @@ constexpr inline std::string_view convert_stream_error(stream_error e) {
 template<typename T>
 constexpr bool has_bitwise_serialization() {
    if constexpr (std::is_arithmetic_v<T> 
-#ifndef ABIEOS_NO_INT128
+#ifndef ABIALA_NO_INT128
    || std::is_same_v<T, __int128> || std::is_same_v<T, unsigned __int128>
 #endif
    ) {

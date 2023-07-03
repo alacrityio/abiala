@@ -1,4 +1,4 @@
-// copyright defined in abieos/LICENSE.txt
+// copyright defined in abiala/LICENSE.txt
 
 #pragma once
 
@@ -9,19 +9,19 @@
 #include <string_view>
 #include <alaio/from_json.hpp>
 
-#include "abieos_ripemd160.hpp"
+#include "abiala_ripemd160.hpp"
 
-#define ABIEOS_NODISCARD [[nodiscard]]
+#define ABIALA_NODISCARD [[nodiscard]]
 
-namespace abieos {
+namespace abiala {
 
 template <typename State>
-ABIEOS_NODISCARD bool set_error(State& state, std::string error) {
+ABIALA_NODISCARD bool set_error(State& state, std::string error) {
     state.error = std::move(error);
     return false;
 }
 
-ABIEOS_NODISCARD inline bool set_error(std::string& state, std::string error) {
+ABIALA_NODISCARD inline bool set_error(std::string& state, std::string error) {
     state = std::move(error);
     return false;
 }
@@ -91,4 +91,4 @@ std::string binary_to_decimal(const std::array<uint8_t, size>& bin) {
     return result;
 }
 
-} // namespace abieos
+} // namespace abiala

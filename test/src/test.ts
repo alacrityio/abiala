@@ -1,4 +1,4 @@
-// copyright defined in abieos/LICENSE.txt
+// copyright defined in abiala/LICENSE.txt
 
 "use strict";
 
@@ -99,39 +99,39 @@ const testAbi = `{
         ]
     }`;
 
-const lib = new fastcall.Library("../build/libabieos.so")
-  .function("void* abieos_create()")
-  .function("void abieos_destroy(void* context)")
-  .function("char* abieos_get_error(void* context)")
-  .function("int abieos_get_bin_size(void* context)")
-  .function("char* abieos_get_bin_data(void* context)")
-  .function("char* abieos_get_bin_hex(void* context)")
-  .function("uint64 abieos_string_to_name(void* context, char* str)")
-  .function("char* abieos_name_to_string(void* context, uint64 name)")
-  .function("int abieos_set_abi(void* context, uint64 contract, char* abi)")
-  .function("int abieos_set_abi_hex(void* context, uint64 contract, char* hex)")
+const lib = new fastcall.Library("../build/libabiala.so")
+  .function("void* abiala_create()")
+  .function("void abiala_destroy(void* context)")
+  .function("char* abiala_get_error(void* context)")
+  .function("int abiala_get_bin_size(void* context)")
+  .function("char* abiala_get_bin_data(void* context)")
+  .function("char* abiala_get_bin_hex(void* context)")
+  .function("uint64 abiala_string_to_name(void* context, char* str)")
+  .function("char* abiala_name_to_string(void* context, uint64 name)")
+  .function("int abiala_set_abi(void* context, uint64 contract, char* abi)")
+  .function("int abiala_set_abi_hex(void* context, uint64 contract, char* hex)")
   .function(
-    "char* abieos_get_type_for_action(void* context, uint64 contract, uint64 action)"
+    "char* abiala_get_type_for_action(void* context, uint64 contract, uint64 action)"
   )
   .function(
-    "int abieos_json_to_bin(void* context, uint64 contract, char* name, char* json)"
+    "int abiala_json_to_bin(void* context, uint64 contract, char* name, char* json)"
   )
   .function(
-    "char* abieos_hex_to_json(void* context, uint64 contract, char* type, char* hex)"
+    "char* abiala_hex_to_json(void* context, uint64 contract, char* type, char* hex)"
   );
 
 const l = lib.interface;
 const cstr = fastcall.makeStringBuffer;
 
-const context = l.abieos_create();
+const context = l.abiala_create();
 
 function check(result: any) {
-  if (!result) throw new Error(l.abieos_get_error(context).readCString());
+  if (!result) throw new Error(l.abiala_get_error(context).readCString());
 }
 
 function checkPtr(result: any) {
   if (result.isNull())
-    throw new Error(l.abieos_get_error(context).readCString());
+    throw new Error(l.abiala_get_error(context).readCString());
   return result;
 }
 
@@ -140,7 +140,7 @@ function jsonStr(v: any) {
 }
 
 function name(s: string) {
-  return l.abieos_string_to_name(context, cstr(s));
+  return l.abiala_string_to_name(context, cstr(s));
 }
 
 const rpc = new eosjs_jsonrpc.JsonRpc(rpcEndpoint, { fetch });
@@ -184,13 +184,13 @@ function eosjs_json_abi_to_hex(abi: any) {
   return eosjs_ser.arrayToHex(buf.asUint8Array());
 }
 
-function abieos_json_to_hex(contract: number, type: string, data: string) {
-  check(l.abieos_json_to_bin(context, contract, cstr(type), cstr(data)));
-  return l.abieos_get_bin_hex(context).readCString();
+function abiala_json_to_hex(contract: number, type: string, data: string) {
+  check(l.abiala_json_to_bin(context, contract, cstr(type), cstr(data)));
+  return l.abiala_get_bin_hex(context).readCString();
 }
 
-function abieos_hex_to_json(contract: number, type: string, hex: string) {
-  let result = l.abieos_hex_to_json(context, contract, cstr(type), cstr(hex));
+function abiala_hex_to_json(contract: number, type: string, hex: string) {
+  let result = l.abiala_hex_to_json(context, contract, cstr(type), cstr(hex));
   checkPtr(result);
   return result.readCString();
 }
@@ -229,8 +229,8 @@ function check_type(
   data: string,
   expected = data
 ) {
-  let hex = abieos_json_to_hex(contract, type, data);
-  let json = abieos_hex_to_json(contract, type, hex);
+  let hex = abiala_json_to_hex(contract, type, data);
+  let json = abiala_hex_to_json(contract, type, hex);
   console.log(type, data, hex, json);
   if (json !== expected) throw new Error("conversion mismatch");
   json = JSON.stringify(JSON.parse(json));
@@ -252,8 +252,8 @@ function check_type(
 function check_types() {
   let token = name("alaio.token");
   let test = name("test.abi");
-  check(l.abieos_set_abi_hex(context, token, cstr(tokenHexApi)));
-  check(l.abieos_set_abi(context, test, cstr(testAbi)));
+  check(l.abiala_set_abi_hex(context, token, cstr(tokenHexApi)));
+  check(l.abiala_set_abi(context, test, cstr(testAbi)));
   const tokenTypes = eosjs_ser.getTypesFromAbi(
     eosjs_ser.createInitialTypes(),
     eosjs_hex_abi_to_json(tokenHexApi)
@@ -941,21 +941,21 @@ function check_types() {
 async function push_transfer() {
   if (useTokenHexApi)
     check(
-      l.abieos_set_abi_hex(context, name("alaio.token"), cstr(tokenHexApi))
+      l.abiala_set_abi_hex(context, name("alaio.token"), cstr(tokenHexApi))
     );
   else
     check(
-      l.abieos_set_abi(
+      l.abiala_set_abi(
         context,
         name("alaio.token"),
         jsonStr((await rpc.get_abi("alaio.token")).abi)
       )
     );
   let type = checkPtr(
-    l.abieos_get_type_for_action(context, name("alaio.token"), name("transfer"))
+    l.abiala_get_type_for_action(context, name("alaio.token"), name("transfer"))
   );
   check(
-    l.abieos_json_to_bin(
+    l.abiala_json_to_bin(
       context,
       name("alaio.token"),
       type,
@@ -967,11 +967,11 @@ async function push_transfer() {
       })
     )
   );
-  const actionDataHex = l.abieos_get_bin_hex(context).readCString();
+  const actionDataHex = l.abiala_get_bin_hex(context).readCString();
   console.log("action json->bin: ", actionDataHex);
   console.log(
     "action bin->json: ",
-    abieos_hex_to_json(name("alaio.token"), "transfer", actionDataHex)
+    abiala_hex_to_json(name("alaio.token"), "transfer", actionDataHex)
   );
 
   let info = await rpc.get_info();
@@ -1002,13 +1002,13 @@ async function push_transfer() {
     transaction_extensions: [] as any,
   };
   check(
-    l.abieos_json_to_bin(context, 0, cstr("transaction"), jsonStr(transaction))
+    l.abiala_json_to_bin(context, 0, cstr("transaction"), jsonStr(transaction))
   );
-  let transactionDataHex = l.abieos_get_bin_hex(context).readCString();
+  let transactionDataHex = l.abiala_get_bin_hex(context).readCString();
   console.log("transaction json->bin: ", transactionDataHex);
   console.log(
     "transaction bin->json: ",
-    abieos_hex_to_json(0, "transaction", transactionDataHex)
+    abiala_hex_to_json(0, "transaction", transactionDataHex)
   );
 
   let sig = await signatureProvider.sign({
@@ -1031,7 +1031,7 @@ async function push_transfer() {
 (async () => {
   try {
     check(context);
-    check(l.abieos_set_abi(context, 0, jsonStr(transactionAbi)));
+    check(l.abiala_set_abi(context, 0, jsonStr(transactionAbi)));
     check_types();
     if (useRpcEndpoint) await push_transfer();
   } catch (e) {

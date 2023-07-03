@@ -91,7 +91,7 @@ void to_json(bool value, S& stream) {
 template <typename T>
 struct make_unsigned : std::make_unsigned<T> {};
 
-#ifndef ABIEOS_NO_INT128
+#ifndef ABIALA_NO_INT128
 // some standard library does not support std::make_unsigned<__int128> yet. 
 template <>
 struct make_unsigned<__int128> {
@@ -171,7 +171,7 @@ template <typename S> void to_json(int64_t value, S& stream) { return int_to_jso
 template <typename S> void to_json(double value, S& stream) { return fp_to_json(value, stream); }
 template <typename S> void to_json(float value, S& stream) { return fp_to_json(value, stream); }
 
-#ifndef ABIEOS_NO_INT128
+#ifndef ABIALA_NO_INT128
 template <typename S> void to_json(unsigned __int128 value, S& stream) { return int_to_json(value, stream); }
 template <typename S> void to_json(__int128 value, S& stream) { return int_to_json(value, stream); }
 #endif

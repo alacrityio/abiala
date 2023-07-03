@@ -439,7 +439,7 @@ void from_json(uint64_t& result, S& stream) {
 }
 
 /// \group from_json_explicit
-#ifndef ABIEOS_NO_INT128
+#ifndef ABIALA_NO_INT128
 template <typename S>
 void from_json(unsigned __int128& result, S& stream) {
    from_json_int(result, stream);
@@ -471,7 +471,7 @@ void from_json(int64_t& result, S& stream) {
 }
 
 /// \group from_json_explicit
-#ifndef ABIEOS_NO_INT128
+#ifndef ABIALA_NO_INT128
 template <typename S>
 void from_json(__int128& result, S& stream) {
    from_json_int(result, stream);

@@ -156,7 +156,7 @@ struct asset {
     * @return asset - Reference to this asset
     * @post The amount of this asset is multiplied by a
     */
-#ifndef ABIEOS_NO_INT128
+#ifndef ABIALA_NO_INT128
    asset& operator*=(int64_t a) {
       __int128 tmp = (__int128)amount * (__int128)a;
       alaio::check(tmp <= max_amount, "multiplication overflow");
@@ -174,7 +174,7 @@ struct asset {
     * @param b - The multiplier for the asset's amount
     * @return asset - New asset as the result of multiplication
     */
-#ifndef ABIEOS_NO_INT128
+#ifndef ABIALA_NO_INT128
    friend asset operator*(const asset& a, int64_t b) {
       asset result = a;
       result *= b;
@@ -189,7 +189,7 @@ struct asset {
     * @param b - The asset to be multiplied
     * @return asset - New asset as the result of multiplication
     */
-#ifndef ABIEOS_NO_INT128
+#ifndef ABIALA_NO_INT128
    friend asset operator*(int64_t b, const asset& a) {
       asset result = a;
       result *= b;

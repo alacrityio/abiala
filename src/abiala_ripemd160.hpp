@@ -48,7 +48,7 @@
 #include <assert.h>
 #include <string.h>
 
-namespace abieos_ripemd160 {
+namespace abiala_ripemd160 {
 
 inline constexpr auto ripemd160_digest_size = 20;
 inline constexpr auto ripemd160_magic = 0x9f19dd68u;

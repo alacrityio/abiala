@@ -29,7 +29,7 @@ void to_key(const std::tuple<Ts...>& obj, S& stream);
 //
 // Overloads of to_key for user-defined types can be found by Koenig lookup.
 //
-// Abieos provides specializations of to_key for the following types
+// Abiala provides specializations of to_key for the following types
 // - std::string and std::string_view
 // - std::vector, std::list, std::deque
 // - std::tuple
@@ -39,7 +39,7 @@ void to_key(const std::tuple<Ts...>& obj, S& stream);
 // - Arithmetic types
 // - Scoped enumeration types
 // - Reflected structs
-// - All smart-contract related types defined by abieos
+// - All smart-contract related types defined by abiala
 template <typename T, typename S>
 void to_key(const T& obj, S& stream);
 

@@ -1,5 +1,5 @@
 #include <alaio/to_key.hpp>
-#include "abieos.hpp"
+#include "abiala.hpp"
 
 int error_count;
 
@@ -12,25 +12,25 @@ void report_error(const char* assertion, const char* file, int line) {
 
 #define CHECK(...) do { if(__VA_ARGS__) {} else { report_error(#__VA_ARGS__, __FILE__, __LINE__); } } while(0)
 
-using abieos::int128;
-using abieos::uint128;
-using abieos::varint32;
-using abieos::varuint32;
-using abieos::float128;
-using abieos::time_point;
-using abieos::time_point_sec;
-using abieos::block_timestamp;
+using abiala::int128;
+using abiala::uint128;
+using abiala::varint32;
+using abiala::varuint32;
+using abiala::float128;
+using abiala::time_point;
+using abiala::time_point_sec;
+using abiala::block_timestamp;
 using alaio::name;
-using abieos::bytes;
-using abieos::checksum160;
-using abieos::checksum256;
-using abieos::checksum512;
-using abieos::public_key;
-using abieos::private_key;
-using abieos::signature;
-using abieos::symbol;
-using abieos::symbol_code;
-using abieos::asset;
+using abiala::bytes;
+using abiala::checksum160;
+using abiala::checksum256;
+using abiala::checksum512;
+using abiala::public_key;
+using abiala::private_key;
+using abiala::signature;
+using abiala::symbol;
+using abiala::symbol_code;
+using abiala::asset;
 
 using vec_type = std::vector<int>;
 struct struct_type {

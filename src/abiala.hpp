@@ -1,4 +1,4 @@
-// copyright defined in abieos/LICENSE.txt
+// copyright defined in abiala/LICENSE.txt
 
 #pragma once
 
@@ -36,13 +36,13 @@
 #pragma clang diagnostic pop
 #endif
 
-#include "abieos_numeric.hpp"
+#include "abiala_numeric.hpp"
 
 #include "rapidjson/reader.h"
 #include "rapidjson/stringbuffer.h"
 #include "rapidjson/writer.h"
 
-namespace abieos {
+namespace abiala {
 
 using alaio::from_bin;
 using alaio::to_bin;
@@ -90,7 +90,7 @@ std::string hex(SrcIt begin, SrcIt end) {
 
 // !!!
 template <typename SrcIt, typename DestIt>
-ABIEOS_NODISCARD bool unhex(std::string& error, SrcIt begin, SrcIt end, DestIt dest) {
+ABIALA_NODISCARD bool unhex(std::string& error, SrcIt begin, SrcIt end, DestIt dest) {
     auto get_digit = [&](uint8_t& nibble) {
         if (*begin >= '0' && *begin <= '9')
             nibble = *begin++ - '0';
@@ -288,17 +288,17 @@ struct bin_to_json_state {
 namespace alaio {
 
 struct abi_serializer {
-  virtual void json_to_bin(::abieos::jvalue_to_bin_state& state, bool allow_extensions, const abi_type* type,
+  virtual void json_to_bin(::abiala::jvalue_to_bin_state& state, bool allow_extensions, const abi_type* type,
                                           bool start) const = 0;
-  virtual void json_to_bin(::abieos::json_to_bin_state& state, bool allow_extensions, const abi_type* type,
+  virtual void json_to_bin(::abiala::json_to_bin_state& state, bool allow_extensions, const abi_type* type,
                                           bool start) const = 0;
-  virtual void bin_to_json(::abieos::bin_to_json_state& state, bool allow_extensions, const abi_type* type,
+  virtual void bin_to_json(::abiala::bin_to_json_state& state, bool allow_extensions, const abi_type* type,
                                           bool start) const = 0;
 };
 
 }
 
-namespace abieos {
+namespace abiala {
 
 ///////////////////////////////////////////////////////////////////////////////
 // serializer function prototypes
@@ -373,7 +373,7 @@ using alaio::checksum160;
 using alaio::checksum256;
 using alaio::checksum512;
 
-#ifndef ABIEOS_NO_INT128
+#ifndef ABIALA_NO_INT128
 using uint128 = unsigned __int128;
 using int128 = __int128;
 #endif
@@ -398,7 +398,7 @@ using alaio::extended_asset;
 // 128-bit support when native support is absent
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifdef ABIEOS_NO_INT128
+#ifdef ABIALA_NO_INT128
 
 struct uint128 {
     std::array<uint8_t, 16> data = {};
@@ -457,7 +457,7 @@ using extensions_type = std::vector<std::pair<uint16_t, bytes>>;
 
 using alaio::abi_def;
 
-ABIEOS_NODISCARD inline bool check_abi_version(const std::string& s, std::string& error) {
+ABIALA_NODISCARD inline bool check_abi_version(const std::string& s, std::string& error) {
     if (s.substr(0, 13) != "alaio::abi/1.")
         return set_error(error, "unsupported abi version");
     return true;
@@ -467,10 +467,10 @@ ABIEOS_NODISCARD inline bool check_abi_version(const std::string& s, std::string
 // json_to_jvalue
 ///////////////////////////////////////////////////////////////////////////////
 
-ABIEOS_NODISCARD bool json_to_jobject(jvalue& value, json_to_jvalue_state& state, event_type event, bool start);
-ABIEOS_NODISCARD bool json_to_jarray(jvalue& value, json_to_jvalue_state& state, event_type event, bool start);
+ABIALA_NODISCARD bool json_to_jobject(jvalue& value, json_to_jvalue_state& state, event_type event, bool start);
+ABIALA_NODISCARD bool json_to_jarray(jvalue& value, json_to_jvalue_state& state, event_type event, bool start);
 
-ABIEOS_NODISCARD inline bool receive_event(struct json_to_jvalue_state& state, event_type event, bool start) {
+ABIALA_NODISCARD inline bool receive_event(struct json_to_jvalue_state& state, event_type event, bool start) {
     if (state.stack.empty())
         return set_error(state, "extra data");
     if (state.stack.size() > max_stack_size)
@@ -522,7 +522,7 @@ inline void json_to_jvalue(jvalue& value, std::string_view json, F&& f) {
         alaio::convert_json_error(alaio::from_json_error::unspecific_syntax_error));
 }
 
-ABIEOS_NODISCARD inline bool json_to_jobject(jvalue& value, json_to_jvalue_state& state, event_type event, bool start) {
+ABIALA_NODISCARD inline bool json_to_jobject(jvalue& value, json_to_jvalue_state& state, event_type event, bool start) {
     if (start) {
         if (event != event_type::received_start_object)
             return set_error(state, "expected object");
@@ -549,7 +549,7 @@ ABIEOS_NODISCARD inline bool json_to_jobject(jvalue& value, json_to_jvalue_state
     }
 }
 
-ABIEOS_NODISCARD inline bool json_to_jarray(jvalue& value, json_to_jvalue_state& state, event_type event, bool start) {
+ABIALA_NODISCARD inline bool json_to_jarray(jvalue& value, json_to_jvalue_state& state, event_type event, bool start) {
     if (start) {
         if (event != event_type::received_start_array)
             return set_error(state, "expected array");
@@ -1008,4 +1008,4 @@ auto bin_to_json(T* t, bin_to_json_state& state, bool, const abi_type*, bool sta
     return to_json(v, state.writer);
 }
 
-} // namespace abieos
+} // namespace abiala
