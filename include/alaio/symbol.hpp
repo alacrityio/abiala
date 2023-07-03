@@ -1,6 +1,6 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in ala/LICENSE
  */
 #pragma once
 
@@ -116,7 +116,7 @@ class symbol_code {
          auto c = (value >> remaining_bits) & 0x1Full;
          if (!c) { // if this character is a dot
             tmp = static_cast<uint32_t>(remaining_bits);
-         } else { // if this character is not a dot
+         } else {  // if this character is not a dot
             remaining_bits_after_last_actual_dot = tmp;
          }
       }
@@ -176,7 +176,7 @@ template <typename S>
 void from_json(symbol_code& obj, S& stream) {
    auto s = stream.get_string();
    check(string_to_symbol_code(obj.value, s.data(), s.data() + s.size()),
-      convert_json_error(alaio::from_json_error::expected_symbol_code));
+         convert_json_error(alaio::from_json_error::expected_symbol_code));
 }
 
 /**
@@ -254,7 +254,7 @@ template <typename S>
 void from_json(symbol& obj, S& stream) {
    auto s = stream.get_string();
    check(string_to_symbol(obj.value, s.data(), s.data() + s.size()),
-      convert_json_error(alaio::from_json_error::expected_symbol));
+         convert_json_error(alaio::from_json_error::expected_symbol));
 }
 
 /**

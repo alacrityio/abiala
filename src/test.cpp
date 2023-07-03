@@ -622,11 +622,11 @@ void check_types() {
             abi_is_bin = false;
             abi = {transactionAbi, transactionAbi + strlen(transactionAbi)};
         } else if (contract == 1) {
-           abi_is_bin = false;
-           abi = {packedTransactionAbi, packedTransactionAbi + strlen( packedTransactionAbi )};
+            abi_is_bin = false;
+            abi = {packedTransactionAbi, packedTransactionAbi + strlen(packedTransactionAbi)};
         } else if (contract == 2) {
-           abi_is_bin = false;
-           abi = {state_history_plugin_abi, state_history_plugin_abi + strlen( state_history_plugin_abi )};
+            abi_is_bin = false;
+            abi = {state_history_plugin_abi, state_history_plugin_abi + strlen(state_history_plugin_abi)};
         } else if (contract == token) {
             abi_is_bin = true;
             std::string error;
@@ -987,9 +987,8 @@ void check_types() {
     check_type(
         context, 2, "transaction_trace",
         R"(["transaction_trace_v0",{"id":"3098EA9476266BFA957C13FA73C26806D78753099CE8DEF2A650971F07595A69","status":0,"cpu_usage_us":2000,"net_usage_words":25,"elapsed":"194","net_usage":"200","scheduled":false,"action_traces":[["action_trace_v1",{"action_ordinal":1,"creator_action_ordinal":0,"receipt":["action_receipt_v0",{"receiver":"alaio","act_digest":"F2FDEEFF77EFC899EED23EE05F9469357A096DC3083D493571CF68A422C69EFE","global_sequence":"11","recv_sequence":"11","auth_sequence":[{"account":"alaio","sequence":"11"}],"code_sequence":2,"abi_sequence":0}],"receiver":"alaio","act":{"account":"alaio","name":"newaccount","authorization":[{"actor":"alaio","permission":"active"}],"data":"0000000000EA305500409406A888CCA501000000010002C0DED2BC1F1305FB0FAAC5E6C03EE3A1924234985427B6167CA569D13DF435CF0100000001000000010002C0DED2BC1F1305FB0FAAC5E6C03EE3A1924234985427B6167CA569D13DF435CF01000000"},"context_free":false,"elapsed":"83","console":"","account_ram_deltas":[{"account":"oracle.aml","delta":"2724"}],"account_disk_deltas":[],"except":null,"error_code":null,"return_value":""}]],"account_ram_delta":null,"except":null,"error_code":null,"failed_dtrx_trace":null,"partial":null}])");
-    check_type(
-        context, 2, "transaction_trace_msg",
-        R"(["transaction_trace_exception",{"error_code":"3","error_message":"error happens"}])");
+    check_type(context, 2, "transaction_trace_msg",
+               R"(["transaction_trace_exception",{"error_code":"3","error_message":"error happens"}])");
     check_type(
         context, 2, "transaction_trace_msg",
         R"(["transaction_trace",["transaction_trace_v0",{"id":"B2C8D46F161E06740CFADABFC9D11F013A1C90E25337FF3E22840B195E1ADC4B","status":0,"cpu_usage_us":2000,"net_usage_words":12,"elapsed":"7670","net_usage":"96","scheduled":false,"action_traces":[["action_trace_v1",{"action_ordinal":1,"creator_action_ordinal":0,"receipt":["action_receipt_v0",{"receiver":"alaio","act_digest":"7670940C29EC0A4C573EF052C5A29236393F587F208222B3C1B6A9C8FEA2C66A","global_sequence":"27","recv_sequence":"1","auth_sequence":[{"account":"alaio","sequence":"2"}],"code_sequence":1,"abi_sequence":0}],"receiver":"alaio","act":{"account":"alaio","name":"doit","authorization":[{"actor":"alaio","permission":"active"}],"data":"00"},"context_free":false,"elapsed":"7589","console":"","account_ram_deltas":[],"account_disk_deltas":[],"except":null,"error_code":null,"return_value":"01FFFFFFFFFFFFFFFF00"}]],"account_ram_delta":null,"except":null,"error_code":null,"failed_dtrx_trace":null,"partial":null}]])");
@@ -1218,7 +1217,7 @@ void check_types() {
     testWith(testHexAbiName);
 
     auto check_checksum_capacity = [&](const auto& checksum, size_t capacity, const char* msg) {
-        if(checksum.capacity() != capacity)
+        if (checksum.capacity() != capacity)
             throw std::runtime_error(std::string{msg} + " capacity test failed");
     };
 
@@ -1226,9 +1225,15 @@ void check_types() {
     check_checksum_capacity(alaio::checksum256(), 32, "checksum256");
     check_checksum_capacity(alaio::checksum512(), 64, "checksum512");
 
-    check_checksum_capacity(alaio::checksum160({1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}), 20, "checksum160");
-    check_checksum_capacity(alaio::checksum256({1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}), 32, "checksum256");
-    check_checksum_capacity(alaio::checksum512({1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}), 64, "checksum512");
+    check_checksum_capacity(alaio::checksum160({1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}), 20,
+                            "checksum160");
+    check_checksum_capacity(alaio::checksum256({1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                                                1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}),
+                            32, "checksum256");
+    check_checksum_capacity(alaio::checksum512({1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                                                1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                                                1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}),
+                            64, "checksum512");
 
     abiala_destroy(context);
 }

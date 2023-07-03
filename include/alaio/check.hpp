@@ -1,25 +1,20 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in ala/LICENSE
  */
 #pragma once
 
 #ifdef __alaio_cdt__
-#include <cstdint>
-namespace alaio {
-namespace internal_use_do_not_use {
-extern "C" {
-__attribute__((alaio_wasm_import, noreturn))
-void alaio_assert_message(uint32_t, const char*, uint32_t);
-__attribute__((alaio_wasm_import, noreturn))
-void alaio_assert(uint32_t, const char*);
-__attribute__((alaio_wasm_import, noreturn))
-void alaio_assert_code(uint32_t, uint64_t);
-}
-}
-}
+#   include <cstdint>
+namespace alaio { namespace internal_use_do_not_use {
+   extern "C" {
+   __attribute__((alaio_wasm_import, noreturn)) void alaio_assert_message(uint32_t, const char*, uint32_t);
+   __attribute__((alaio_wasm_import, noreturn)) void alaio_assert(uint32_t, const char*);
+   __attribute__((alaio_wasm_import, noreturn)) void alaio_assert_code(uint32_t, uint64_t);
+   }
+}} // namespace alaio::internal_use_do_not_use
 #else
-#include <stdexcept>
+#   include <stdexcept>
 #endif
 
 #include <string>
@@ -33,7 +28,6 @@ namespace alaio {
  *  @brief Defines wrappers over alaio_assert
  */
 
-
 struct alaio_error : std::exception {
    explicit alaio_error(uint64_t code) {}
 };
@@ -41,33 +35,33 @@ struct alaio_error : std::exception {
 namespace detail {
    [[noreturn]] inline void assert_or_throw(std::string_view msg) {
 #ifdef __alaio_cdt__
-         internal_use_do_not_use::alaio_assert_message(false, msg.data(), msg.size());
+      internal_use_do_not_use::alaio_assert_message(false, msg.data(), msg.size());
 #else
-         throw std::runtime_error(std::string(msg));
+      throw std::runtime_error(std::string(msg));
 #endif
    }
    [[noreturn]] inline void assert_or_throw(const char* msg) {
 #ifdef __alaio_cdt__
-         internal_use_do_not_use::alaio_assert(false, msg);
+      internal_use_do_not_use::alaio_assert(false, msg);
 #else
-         throw std::runtime_error(msg);
+      throw std::runtime_error(msg);
 #endif
    }
    [[noreturn]] inline void assert_or_throw(std::string&& msg) {
 #ifdef __alaio_cdt__
-         internal_use_do_not_use::alaio_assert_message(false, msg.c_str(), msg.size());
+      internal_use_do_not_use::alaio_assert_message(false, msg.c_str(), msg.size());
 #else
-         throw std::runtime_error(std::move(msg));
+      throw std::runtime_error(std::move(msg));
 #endif
    }
    [[noreturn]] inline void assert_or_throw(uint64_t code) {
 #ifdef __alaio_cdt__
-         internal_use_do_not_use::alaio_assert_code(false, code);
+      internal_use_do_not_use::alaio_assert_code(false, code);
 #else
-         throw std::runtime_error(std::to_string(code));
+      throw std::runtime_error(std::to_string(code));
 #endif
    }
-} // ns alaio::detail
+} // namespace detail
 
 /**
  *  Assert if the predicate fails and use the supplied message.
@@ -111,7 +105,7 @@ inline void check(bool pred, const char* msg) {
  */
 inline void check(bool pred, const std::string& msg) {
    if (!pred)
-      alaio::detail::assert_or_throw(std::string_view{msg.c_str(), msg.size()});
+      alaio::detail::assert_or_throw(std::string_view{ msg.c_str(), msg.size() });
 }
 
 /**
@@ -142,7 +136,7 @@ inline void check(bool pred, std::string&& msg) {
  */
 inline void check(bool pred, const char* msg, size_t n) {
    if (!pred)
-      alaio::detail::assert_or_throw(std::string_view{msg, n});
+      alaio::detail::assert_or_throw(std::string_view{ msg, n });
 }
 
 /**

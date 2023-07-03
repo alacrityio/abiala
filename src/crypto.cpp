@@ -1,11 +1,11 @@
-#include <algorithm>
-#include <array>
-#include <cstdint>
 #include "../include/alaio/crypto.hpp"
 #include "../include/alaio/from_bin.hpp"
 #include "../include/alaio/from_json.hpp"
 #include "../include/alaio/to_bin.hpp"
 #include "../include/alaio/to_json.hpp"
+#include <algorithm>
+#include <array>
+#include <cstdint>
 #include <string>
 #include <string_view>
 
@@ -39,8 +39,7 @@ void base58_to_binary(Container& result, std::string_view s) {
     std::size_t offset = result.size();
     for (auto& src_digit : s) {
         int carry = base58_map[static_cast<uint8_t>(src_digit)];
-        check(carry >= 0,
-            ::alaio::convert_json_error(::alaio::from_json_error::expected_key));
+        check(carry >= 0, ::alaio::convert_json_error(::alaio::from_json_error::expected_key));
         for (std::size_t i = offset; i < result.size(); ++i) {
             auto& result_byte = result[i];
             int x = static_cast<uint8_t>(result_byte) * 58 + carry;
@@ -89,22 +88,20 @@ std::array<unsigned char, 20> digest_suffix_ripemd160(const Container&... data) 
     abiala_ripemd160::ripemd160_state self;
     abiala_ripemd160::ripemd160_init(&self);
     (abiala_ripemd160::ripemd160_update(&self, data.data(), data.size()), ...);
-    check( abiala_ripemd160::ripemd160_digest(&self, digest.data()),
-        convert_json_error(alaio::from_json_error::invalid_signature) );
+    check(abiala_ripemd160::ripemd160_digest(&self, digest.data()),
+          convert_json_error(alaio::from_json_error::invalid_signature));
     return digest;
 }
-
 
 template <typename Key>
 Key string_to_key(std::string_view s, key_type type, std::string_view suffix) {
     std::vector<char> whole;
     whole.push_back(uint8_t{type});
     base58_to_binary(whole, s);
-    check(whole.size() > 5,
-        convert_json_error(alaio::from_json_error::expected_key));
+    check(whole.size() > 5, convert_json_error(alaio::from_json_error::expected_key));
     auto ripe_digest = digest_suffix_ripemd160(std::string_view(whole.data() + 1, whole.size() - 5), suffix);
-    check(memcmp(ripe_digest.data(), whole.data() + whole.size() - 4, 4)==0,
-        convert_json_error(from_json_error::expected_key));
+    check(memcmp(ripe_digest.data(), whole.data() + whole.size() - 4, 4) == 0,
+          convert_json_error(from_json_error::expected_key));
     whole.erase(whole.end() - 4, whole.end());
     return convert_from_bin<Key>(whole);
 }
@@ -126,14 +123,14 @@ std::string alaio::public_key_to_string(const public_key& key) {
     } else if (key.index() == key_type::wa) {
         return key_to_string(key, "WA", "PUB_WA_");
     } else {
-       check(false, convert_json_error(alaio::from_json_error::expected_public_key));
-       __builtin_unreachable();
+        check(false, convert_json_error(alaio::from_json_error::expected_public_key));
+        __builtin_unreachable();
     }
 }
 
 public_key alaio::public_key_from_string(std::string_view s) {
     public_key result;
-    if (s.substr(0, 3) == "EOS") {
+    if (s.substr(0, 3) == "ALA") {
         return string_to_key<public_key>(s.substr(3), key_type::k1, "");
     } else if (s.substr(0, 7) == "PUB_K1_") {
         return string_to_key<public_key>(s.substr(7), key_type::k1, "K1");
@@ -142,8 +139,8 @@ public_key alaio::public_key_from_string(std::string_view s) {
     } else if (s.substr(0, 7) == "PUB_WA_") {
         return string_to_key<public_key>(s.substr(7), key_type::wa, "WA");
     } else {
-       check(false, convert_json_error(from_json_error::expected_public_key));
-       __builtin_unreachable();
+        check(false, convert_json_error(from_json_error::expected_public_key));
+        __builtin_unreachable();
     }
 }
 
@@ -153,8 +150,8 @@ std::string alaio::private_key_to_string(const private_key& private_key) {
     else if (private_key.index() == key_type::r1)
         return key_to_string(private_key, "R1", "PVT_R1_");
     else {
-       check(false, convert_json_error(from_json_error::expected_private_key));
-       __builtin_unreachable();
+        check(false, convert_json_error(from_json_error::expected_private_key));
+        __builtin_unreachable();
     }
 }
 
@@ -164,8 +161,8 @@ private_key alaio::private_key_from_string(std::string_view s) {
     else if (s.substr(0, 7) == "PVT_R1_")
         return string_to_key<private_key>(s.substr(7), key_type::r1, "R1");
     else if (s.substr(0, 4) == "PVT_") {
-       check(false, convert_json_error(from_json_error::expected_private_key));
-       __builtin_unreachable();
+        check(false, convert_json_error(from_json_error::expected_private_key));
+        __builtin_unreachable();
     } else {
         std::vector<char> whole;
         base58_to_binary(whole, s);
@@ -184,8 +181,8 @@ std::string alaio::signature_to_string(const alaio::signature& signature) {
     else if (signature.index() == key_type::wa)
         return key_to_string(signature, "WA", "SIG_WA_");
     else {
-       check(false, convert_json_error(alaio::from_json_error::expected_signature));
-       __builtin_unreachable();
+        check(false, convert_json_error(alaio::from_json_error::expected_signature));
+        __builtin_unreachable();
     }
 }
 
@@ -197,19 +194,17 @@ signature alaio::signature_from_string(std::string_view s) {
     else if (s.size() >= 7 && s.substr(0, 7) == "SIG_WA_")
         return string_to_key<signature>(s.substr(7), key_type::wa, "WA");
     else {
-       check(false, convert_json_error(alaio::from_json_error::expected_signature));
-       __builtin_unreachable();
+        check(false, convert_json_error(alaio::from_json_error::expected_signature));
+        __builtin_unreachable();
     }
 }
 
 namespace alaio {
-    std::string to_base58(const char* d, size_t s ) {
-        return binary_to_base58( std::string_view(d,s) );
-    }
+std::string to_base58(const char* d, size_t s) { return binary_to_base58(std::string_view(d, s)); }
 
-    std::vector<char> from_base58(const std::string_view& s) {
-        std::vector<char> ret;
-        base58_to_binary(ret, s);
-        return ret;
-    }
+std::vector<char> from_base58(const std::string_view& s) {
+    std::vector<char> ret;
+    base58_to_binary(ret, s);
+    return ret;
 }
+} // namespace alaio
